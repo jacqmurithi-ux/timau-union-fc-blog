@@ -13,7 +13,7 @@ The private dashboard is available at **https://blog.timauunionfc.co.ke/admin.ht
 
 Editors can create, preview, publish and unpublish articles; upload article images; and manage sponsor content and homepage announcements. Public visitors can read only published stories and active homepage content.
 
-The blog uses the existing Timau Union FC Supabase project (`owvvimydkjsjlrmnzvdi`) and a browser-safe publishable key. Never put a Supabase service-role/secret key in this repository. Article text is plain text with blank lines between paragraphs; HTML entered by editors is not executed.
+The blog uses the existing Timau Union FC Supabase project (`owvvimydkjsjlrmnzvdi`) and a browser-safe publishable key. The reproducible database setup is recorded in `supabase/migrations/20261025000000_create_private_blog_admin.sql`. Never put a Supabase service-role/secret key in this repository. Article text is plain text with blank lines between paragraphs; HTML entered by editors is not executed.
 
 Use only confirmed club information. Do not invent upcoming fixtures, scorers, results, quotes, or announcements. Until an upcoming fixture is officially confirmed, direct readers to the club's season page.
 
