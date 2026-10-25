@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded",function(){
   client.auth.getSession().then(async function(r){if(r.data.session){try{await openWorkspace(r.data.session.user);}catch(err){await client.auth.signOut();message(loginMessage,err.message,true);}}});
   document.querySelectorAll("[data-tab]").forEach(function(button){button.addEventListener("click",function(){
     document.querySelectorAll("[data-tab]").forEach(function(b){var active=b===button;b.classList.toggle("is-active",active);b.setAttribute("aria-selected",String(active));});
-    document.getElementById("articles-tab").hidden=button.dataset.tab!=="articles";document.getElementById("site-content-tab").hidden=button.dataset.tab!=="site-content";
+    document.getElementById("articles-tab").hidden=button.dataset.tab!=="articles";document.getElementById("site-content-tab").hidden=button.dataset.tab!=="site-content";document.getElementById("appearance-tab").hidden=button.dataset.tab!=="appearance";
   });});
   async function loadArticles(){
     articleList.replaceChildren(el("p","","Loading…"));
@@ -167,4 +167,49 @@ document.addEventListener("DOMContentLoaded",function(){
       contentForm.hidden=true;message(contentMessage,"Content saved. Uploaded image is ready for the public blog.",false);await loadSiteItems();
     }catch(err){message(contentMessage,err.message||"Could not save content.",true);}
   });
+  var defaultCrest="https://timauunionfc.co.ke/assets/club-crest.jpg";
+  var appearanceRecords={};
+  var logoFile=document.getElementById("appearance-logo-file"),partnerFile=document.getElementById("appearance-partner-file");
+  function previewAppearanceFile(input,preview,previewImg,messageNode){
+    input.addEventListener("change",function(){var file=input.files&&input.files[0];if(!file)return;
+      if(!/^image\/(jpeg|png|webp|avif)$/.test(file.type)||file.size>10485760){input.value="";message(messageNode,"Choose a JPG, PNG, WebP or AVIF image under 10 MB.",true);return;}
+      previewImg.src=URL.createObjectURL(file);preview.hidden=false;message(messageNode,"Image selected. Save to publish it.",false);
+    });
+  }
+  previewAppearanceFile(logoFile,document.getElementById("appearance-logo-preview"),document.getElementById("appearance-logo-preview-img"),document.getElementById("appearance-logo-message"));
+  previewAppearanceFile(partnerFile,document.getElementById("appearance-partner-preview"),document.getElementById("appearance-partner-preview-img"),document.getElementById("appearance-partner-message"));
+  async function loadAppearance(){
+    var r=await client.from("blog_site_content").select("*").in("content_type",["branding","partner_image"]);
+    if(r.error){message(document.getElementById("appearance-logo-message"),"Could not load appearance settings: "+r.error.message,true);return;}
+    appearanceRecords={};(r.data||[]).forEach(function(item){appearanceRecords[item.content_type]=item;});
+    var brand=appearanceRecords.branding,partner=appearanceRecords.partner_image;
+    var logo=document.getElementById("appearance-logo-current"),pimg=document.getElementById("appearance-partner-current");
+    logo.src=(brand&&safeUrl(brand.image_url))||defaultCrest;logo.hidden=false;
+    if(partner&&partner.image_url&&safeUrl(partner.image_url)){pimg.src=safeUrl(partner.image_url);pimg.hidden=false;}else{pimg.removeAttribute("src");pimg.hidden=true;}
+  }
+  async function saveAppearance(type,fileInput,url,messageNode,title,reset){
+    message(messageNode,reset?"Resetting…":"Saving image…",false);
+    try{
+      var existing=appearanceRecords[type],urlValue=reset?(type==="branding"?defaultCrest:null):(existing&&existing.image_url)||null,pathValue=reset?null:(existing&&existing.image_path)||null;
+      var file=!reset&&fileInput.files&&fileInput.files[0];
+      if(file){
+        var ext=file.name.split(".").pop().toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";
+        var path="appearance/"+type+"-"+Date.now()+"-"+crypto.randomUUID()+"."+ext;
+        var uploaded=await client.storage.from("blog-article-images").upload(path,file,{contentType:file.type,upsert:false});
+        if(uploaded.error)throw uploaded.error;
+        urlValue=client.storage.from("blog-article-images").getPublicUrl(path).data.publicUrl;pathValue=path;
+      }else if(!reset&&!existing){throw new Error("Choose an image before saving.");}
+      var payload={content_type:type,title:title,body:type==="branding"?"Official blog header logo; also used for footer and favicon.":"Optional homepage partner section image.",image_url:urlValue,image_path:pathValue,active:type==="branding"||!!urlValue,sort_order:type==="branding"?-100:0,updated_by:currentUser.id};
+      if(existing){var updated=await client.from("blog_site_content").update(payload).eq("id",existing.id);if(updated.error)throw updated.error;}
+      else{payload.created_by=currentUser.id;var inserted=await client.from("blog_site_content").insert(payload);if(inserted.error)throw inserted.error;}
+      fileInput.value="";var previewId=type==="branding"?"appearance-logo-preview":"appearance-partner-preview";document.getElementById(previewId).hidden=true;
+      await loadAppearance();message(messageNode,reset?"Appearance reset successfully.":"Image saved. The public blog will update automatically.",false);
+    }catch(err){message(messageNode,err.message||"Could not save image.",true);}
+  }
+  document.getElementById("save-appearance-logo").addEventListener("click",function(){saveAppearance("branding",logoFile,null,document.getElementById("appearance-logo-message"),"Blog icon and logo",false);});
+  document.getElementById("reset-appearance-logo").addEventListener("click",function(){saveAppearance("branding",logoFile,null,document.getElementById("appearance-logo-message"),"Blog icon and logo",true);});
+  document.getElementById("save-appearance-partner").addEventListener("click",function(){saveAppearance("partner_image",partnerFile,null,document.getElementById("appearance-partner-message"),"Homepage partner image",false);});
+  document.getElementById("reset-appearance-partner").addEventListener("click",function(){saveAppearance("partner_image",partnerFile,null,document.getElementById("appearance-partner-message"),"Homepage partner image",true);});
+  document.querySelector('[data-tab="appearance"]').addEventListener("click",loadAppearance);
+
 });

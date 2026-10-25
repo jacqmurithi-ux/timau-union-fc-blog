@@ -3,14 +3,17 @@ document.addEventListener("DOMContentLoaded",async function(){
   function safeUrl(value){try{var u=new URL(value,location.origin);return ["https:","http:"].includes(u.protocol)?u.href:"";}catch(_){return "";}}
   try{
     var client=window.supabase.createClient(window.BLOG_SUPABASE_URL,window.BLOG_SUPABASE_KEY);
-    var result=await client.from("blog_site_content").select("content_type,title,image_url,active").eq("active",true).in("content_type",["branding","hero"]);
+    var result=await client.from("blog_site_content").select("content_type,title,image_url,active").eq("active",true).in("content_type",["branding","hero","partner_image"]);
     if(result.error||!result.data)return;
     var brand=result.data.find(function(x){return x.content_type==="branding"&&safeUrl(x.image_url);});
     if(brand){
       var icon=safeUrl(brand.image_url);
       document.querySelectorAll('link[rel~="icon"]').forEach(function(link){link.href=icon;});
-      document.querySelectorAll(".brand img,.support-crest img,.footer-crest").forEach(function(img){img.src=icon;});
+      document.querySelectorAll(".brand img,.support-crest img,.footer-crest").forEach(function(img){img.src=icon;img.hidden=false;img.onerror=function(){this.onerror=null;this.src="https://timauunionfc.co.ke/assets/club-crest.jpg";};});
     }
+    var partner=result.data.find(function(x){return x.content_type==="partner_image"&&safeUrl(x.image_url);});
+    var partnerImg=document.getElementById("partner-image");
+    if(partnerImg){if(partner){partnerImg.src=safeUrl(partner.image_url);partnerImg.hidden=false;}else{partnerImg.hidden=true;}}
     var hero=result.data.find(function(x){return x.content_type==="hero"&&safeUrl(x.image_url);});
     var slot=document.getElementById("hero-photo-slot"),photo=document.getElementById("hero-photo-image");
     if(slot&&photo&&hero){
