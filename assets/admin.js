@@ -16,8 +16,10 @@ document.addEventListener("DOMContentLoaded",function(){
   function dateLabel(value){if(!value)return "Not published";var d=new Date(value);return isNaN(d)?"":d.toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});}
   function safeUrl(value){try{var u=new URL(value,window.location.origin);return ["https:","http:"].includes(u.protocol)?u.href:"";}catch(_){return "";}}
   async function checkAccess(){
+    var access=await client.rpc("blog_can_manage_current_user");
+    if(access.error||access.data!==true)throw new Error("This account does not have blog editor access. Ask the Platform Admin to confirm your approved club role.");
     var result=await client.from("blog_articles").select("id").limit(1);
-    if(result.error)throw new Error("This account does not have blog editor access. Ask the Platform Admin to confirm your approved club role.");
+    if(result.error)throw new Error("Blog editor access could not be verified. Please try again.");
   }
   async function openWorkspace(user){
     currentUser=user;await checkAccess();loginPanel.hidden=true;workspace.hidden=false;
