@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded",function(){
   var activeFilter="all";
   var visibleLimit=6;
   function applyStoryView(){
+    cards=Array.prototype.slice.call(document.querySelectorAll(".story-card"));
     var query=searchInput?searchInput.value.trim().toLowerCase():"";
     var matches=cards.filter(function(card){
       var categoryMatches=activeFilter==="all"||card.getAttribute("data-category")===activeFilter;
@@ -44,6 +45,7 @@ document.addEventListener("DOMContentLoaded",function(){
   });
   if(searchInput)searchInput.addEventListener("input",function(){visibleLimit=6;applyStoryView();});
   if(loadMore)loadMore.addEventListener("click",function(){visibleLimit+=6;applyStoryView();});
+  window.applyBlogStoryFilters=applyStoryView;
   applyStoryView();
 
   var fixtureBox=document.getElementById("next-fixture");
