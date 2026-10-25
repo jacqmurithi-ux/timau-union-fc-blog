@@ -15,7 +15,7 @@
 <form id="login-form" class="admin-form"><label>Email<input type="email" name="email" autocomplete="username" required></label><label>Password<input type="password" name="password" autocomplete="current-password" required></label><button class="button button-red" type="submit">Sign in securely</button><p id="login-message" class="form-message" role="status"></p></form></section>
 <section id="workspace" hidden>
 <div class="admin-toolbar"><div><strong id="signed-in-email"></strong><p>Changes save to the blog database.</p></div><button id="sign-out" class="button button-outline" type="button">Sign out</button></div>
-<div class="admin-tabs" role="tablist" aria-label="Dashboard sections"><button class="admin-tab is-active" data-tab="articles" role="tab" aria-selected="true">Articles</button><button class="admin-tab" data-tab="site-content" role="tab" aria-selected="false">Sponsors & announcements</button></div>
+<div class="admin-tabs" role="tablist" aria-label="Dashboard sections"><button class="admin-tab is-active" data-tab="articles" role="tab" aria-selected="true">Articles</button><button class="admin-tab" data-tab="site-content" role="tab" aria-selected="false">Sponsors & announcements</button><button class="admin-tab" data-tab="appearance" role="tab" aria-selected="false">Blog Appearance</button></div>
 <section id="articles-tab" class="admin-layout">
 <div class="admin-panel"><div class="panel-heading"><div><p class="eyebrow red">STORY LIBRARY</p><h2>Articles</h2></div><button id="new-article" class="button button-red" type="button">+ New article</button></div><div class="article-list" id="article-list"><p>Loading articles…</p></div></div>
 <div class="admin-panel editor-panel"><p class="eyebrow red">EDITOR</p><h2 id="editor-heading">Create an article</h2>
@@ -46,6 +46,13 @@
 <div class="editor-actions"><button class="button button-outline" id="cancel-content-edit" type="button">Cancel</button><button class="button button-red" type="submit">Save content</button></div><p id="content-message" class="form-message" role="status"></p>
 </form>
 </section>
+<section id="appearance-tab" class="admin-panel" hidden>
+<div class="panel-heading"><div><p class="eyebrow red">PUBLIC BLOG BRANDING</p><h2>Blog Appearance</h2></div></div>
+<p>Upload and save images for the public blog. Changes appear automatically after saving. JPG, PNG, WebP or AVIF; maximum 10 MB per image.</p>
+<div class="appearance-grid">
+<div class="appearance-card"><h3>Header logo</h3><p>Used in the blog header, browser tab and footer by default.</p><img id="appearance-logo-current" class="appearance-current" alt="Current blog logo" hidden><label>Choose logo<input id="appearance-logo-file" type="file" accept="image/jpeg,image/png,image/webp,image/avif"></label><div class="image-preview" id="appearance-logo-preview" hidden><img id="appearance-logo-preview-img" alt="New logo preview"></div><div class="editor-actions"><button id="save-appearance-logo" class="button button-red" type="button">Save logo</button><button id="reset-appearance-logo" class="button button-outline" type="button">Reset to club crest</button></div><p id="appearance-logo-message" class="form-message" role="status"></p></div>
+<div class="appearance-card"><h3>Homepage partner image</h3><p>Optional image shown beside the “Support Timau Union FC” partner section.</p><img id="appearance-partner-current" class="appearance-current" alt="Current partner image" hidden><label>Choose partner image<input id="appearance-partner-file" type="file" accept="image/jpeg,image/png,image/webp,image/avif"></label><div class="image-preview" id="appearance-partner-preview" hidden><img id="appearance-partner-preview-img" alt="New partner image preview"></div><div class="editor-actions"><button id="save-appearance-partner" class="button button-red" type="button">Save partner image</button><button id="reset-appearance-partner" class="button button-outline" type="button">Reset to default</button></div><p id="appearance-partner-message" class="form-message" role="status"></p></div>
+</div></section>
 </section>
 </main>
 <div class="preview-modal" id="preview-modal" hidden><div class="preview-dialog" role="dialog" aria-modal="true" aria-labelledby="preview-title"><div class="panel-heading"><h2 id="preview-title">Article preview</h2><button id="close-preview" class="button button-outline" type="button">Close preview</button></div><article id="preview-content" class="article-content"></article></div></div>
