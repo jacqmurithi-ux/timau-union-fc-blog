@@ -11,7 +11,10 @@ document.addEventListener("DOMContentLoaded",async function(){
       document.querySelectorAll('link[rel~="icon"]').forEach(function(link){link.href=icon;});
       document.querySelectorAll(".brand img,.support-crest img,.footer-crest").forEach(function(img){img.src=icon;img.hidden=false;img.onerror=function(){this.onerror=null;this.src="https://timauunionfc.co.ke/assets/club-crest.svg";};});
     }
-    var partner=result.data.find(function(x){return x.content_type==="partner_image"&&safeUrl(x.image_url);});\n    var partnerImg=document.getElementById("partner-image");\n    if(partnerImg){if(partner){partnerImg.src=safeUrl(partner.image_url);partnerImg.hidden=false;}else{partnerImg.hidden=true;}}\n    var hero=result.data.find(function(x){return x.content_type==="hero"&&safeUrl(x.image_url);});
+    var partner=result.data.find(function(x){return x.content_type==="partner_image"&&safeUrl(x.image_url);});
+    var partnerImg=document.getElementById("partner-image");
+    if(partnerImg){if(partner){partnerImg.src=safeUrl(partner.image_url);partnerImg.hidden=false;}else{partnerImg.hidden=true;}}
+    var hero=result.data.find(function(x){return x.content_type==="hero"&&safeUrl(x.image_url);});
     var slot=document.getElementById("hero-photo-slot"),photo=document.getElementById("hero-photo-image");
     if(slot&&photo&&hero){
       photo.src=safeUrl(hero.image_url);photo.alt=hero.title||"Timau Union FC";photo.hidden=false;slot.classList.add("has-photo");
