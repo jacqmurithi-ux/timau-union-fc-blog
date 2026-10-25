@@ -70,4 +70,25 @@ document.addEventListener("DOMContentLoaded",function(){
     if(el.matches("[data-share='whatsapp']"))el.href="https://wa.me/?text="+title+"%20"+url;
     if(el.matches("[data-share='x']"))el.href="https://twitter.com/intent/tweet?text="+title+"&url="+url;
   });
+  document.querySelectorAll("[data-share-copy]").forEach(function(button){
+    button.addEventListener("click",async function(){
+      var status=button.parentElement.querySelector(".share-copy-status");
+      try{
+        await navigator.clipboard.writeText(window.location.href);
+        if(status)status.textContent="Link copied!";
+      }catch(_){
+        var field=document.createElement("textarea");
+        field.value=window.location.href;
+        field.setAttribute("readonly","");
+        field.style.position="fixed";
+        field.style.opacity="0";
+        document.body.append(field);
+        field.select();
+        var copied=false;
+        try{copied=document.execCommand("copy");}catch(__){}
+        field.remove();
+        if(status)status.textContent=copied?"Link copied!":"Copy failed. Please copy the page URL from your browser.";
+      }
+    });
+  });
 });
