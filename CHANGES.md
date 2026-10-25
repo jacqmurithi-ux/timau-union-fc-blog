@@ -1,22 +1,20 @@
 # Blog homepage changes
 
-- Updated Open Graph and Twitter card metadata to use the planned 1200 × 630 PNG social preview.
-- Reworked the red hero headline, calls to action, story filters, search, and mobile navigation using plain HTML, CSS and vanilla JavaScript.
-- Added category filtering, a six-at-a-time Load more control, and a no-results message.
-- Added a JSON-backed next-fixture placeholder and links to the club's official fixture page.
-- Added WhatsApp channel links in the hero and footer, plus a partner invitation without prices or package claims.
-- Added visible keyboard focus styles and removed the external Google Fonts import to reduce external requests.
+- Refreshed the homepage metadata, red hero, crest branding and mobile navigation using plain HTML, CSS and vanilla JavaScript only.
+- Added category filtering, search, accessible pressed states, a no-results message and six-at-a-time loading for when the story list grows.
+- Added WhatsApp channel calls to action, social links, a partner invitation and a JSON-backed fixture placeholder.
+- Removed the external Google Fonts import and added visible keyboard focus styling to reduce external requests and improve accessibility.
+- Social metadata now points to the club's existing crest asset rather than a missing `og-blog.png` file, avoiding a broken preview image URL.
 
-## TODO / outstanding
+## Assets and content notes
 
-- Add an approved club match-day photograph at `/assets/hero-matchday.jpg`; no such file was found in the repository. The hero currently uses a dark red gradient and a labelled photo placeholder.
-- Add `/assets/og-blog.png` as a real 1200 × 630 PNG containing the official crest, “Timau Union FC Blog” and “Our club. Our community. Our future.” The homepage metadata is already set to this path, but the binary asset still needs to be added.
-- No WhatsApp phone number was supplied; the provided official WhatsApp channel link is used instead.
-- No custom sponsor page URL was supplied; the button links to `https://timauunionfc.co.ke/#sponsors`.
-- Confirm that the production social preview debugger fetches the updated metadata after publishing.
+- No approved match-day photograph was present in the repository. The hero uses branded text artwork until an approved photo can be added; no photo has been fabricated.
+- The social preview currently uses the official crest SVG. A dedicated 1200 × 630 PNG would provide a better large social card, but has not been added in this change.
+- The provided WhatsApp channel is used because no WhatsApp phone number was supplied.
+- The partner CTA links to the club's existing sponsor section because no separate sponsor page URL was supplied.
+- The fixture data intentionally says to be confirmed rather than inventing an upcoming match.
 
 ## Validation status
 
-- Source changes are on a separate review branch; production has not been changed.
-- Mobile (360 px / 390 px) and desktop (1280 px) visual browser tests have not been run in this environment.
-- Link debugger verification remains pending until the PNG is committed and the branch is published.
+- Source changes are contained in this pull request; the main club website has not been edited.
+- Automated browser viewport testing at 360 px, 390 px and 1280 px and live social debugger verification were not available here. Please verify after GitHub Pages publishes the merged branch.
