@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded",async function(){
     if(brand){
       var icon=safeUrl(brand.image_url);
       document.querySelectorAll('link[rel~="icon"]').forEach(function(link){link.href=icon;});
-      document.querySelectorAll(".brand img,.support-crest img,.footer-crest").forEach(function(img){img.src=icon;img.hidden=false;img.onerror=function(){this.onerror=null;this.src="https://timauunionfc.co.ke/assets/club-crest.svg";};});
+      document.querySelectorAll(".brand img,.support-crest img,.footer-crest").forEach(function(img){img.src=icon;img.hidden=false;img.onerror=function(){this.onerror=null;this.src="https://timauunionfc.co.ke/assets/club-crest.jpg";};});
     }
     var partner=result.data.find(function(x){return x.content_type==="partner_image"&&safeUrl(x.image_url);});
     var partnerImg=document.getElementById("partner-image");
