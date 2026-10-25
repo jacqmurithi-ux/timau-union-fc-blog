@@ -12,3 +12,10 @@ select 'partner_image','Homepage partner image',
 where not exists (
   select 1 from public.blog_site_content where content_type='partner_image'
 );
+
+-- Replace the stale SVG branding URL with the crest file confirmed in the main club repository.
+update public.blog_site_content
+set image_url='https://timauunionfc.co.ke/assets/club-crest.jpg',
+    updated_at=now()
+where content_type='branding'
+  and image_url='https://timauunionfc.co.ke/assets/club-crest.svg';
