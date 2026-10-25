@@ -14,8 +14,10 @@
   <meta property="og:title" content="Timau Union FC Blog">
   <meta property="og:description" content="Club stories, match reports and community football from Timau.">
   <meta property="og:url" content="https://blog.timauunionfc.co.ke/">
-  <meta property="og:image" content="https://timauunionfc.co.ke/assets/club-crest.svg">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://blog.timauunionfc.co.ke/assets/og-blog.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Timau Union FC Blog">
   <meta name="twitter:description" content="Our club. Our community. Our future.">
 </head>
@@ -24,10 +26,11 @@
   <header class="site-header">
     <div class="header-inner">
       <a class="brand" href="/" aria-label="Timau Union FC Blog home">
-        <img src="https://timauunionfc.co.ke/assets/club-crest.svg" alt="" width="48" height="48" onerror="this.style.display='none'">
+        <img src="https://timauunionfc.co.ke/assets/club-crest.svg" alt="" width="48" height="48">
         <span><strong>TIMAU UNION FC</strong><small>OFFICIAL CLUB BLOG</small></span>
       </a>
-      <nav aria-label="Main navigation">
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
+      <nav id="primary-nav" aria-label="Main navigation">
         <a class="active" href="/">Stories</a>
         <a href="https://timauunionfc.co.ke/season.html">Season</a>
         <a href="https://timauunionfc.co.ke/">Club website ↗</a>
@@ -38,48 +41,72 @@
     <section class="hero">
       <div class="hero-content">
         <p class="eyebrow">TIMAU · MERU COUNTY · KENYA</p>
-        <h1>Our club. Our community. <span>Our future.</span></h1>
-        <p class="hero-copy">The stories behind the badge — match reports, club updates and the people building football together in Timau.</p>
-        <a class="button button-light" href="#latest-stories">Explore the stories <span aria-hidden="true">↓</span></a>
+        <h1>Stories from the pitch and the people behind it.</h1>
+        <p class="hero-copy">Match reports, club updates and community stories from Timau Union FC.</p>
+        <div class="hero-actions">
+          <a class="button button-light" href="#latest-stories">Explore the stories <span aria-hidden="true">↓</span></a>
+          <a class="button button-whatsapp" href="https://whatsapp.com/channel/0029VbEVNYh2975I1olyh23K" target="_blank" rel="noopener noreferrer">Follow on WhatsApp ↗</a>
+        </div>
       </div>
-      <div class="hero-mark" aria-hidden="true"><span>TU</span><i></i></div>
+      <div class="hero-photo-slot" role="img" aria-label="Match-day photograph placeholder. TODO: add an approved club match-day photo at /assets/hero-matchday.jpg.">
+        <span>Club match-day photo</span><small>TODO: add /assets/hero-matchday.jpg</small>
+      </div>
     </section>
     <section class="content-section" id="latest-stories">
       <div class="section-heading">
         <div><p class="eyebrow red">FROM THE CLUB</p><h2>Latest stories</h2></div>
         <a class="text-link" href="https://timauunionfc.co.ke/">Visit the club website ↗</a>
       </div>
-      <div class="story-grid">
-        <article class="story-card featured">
+      <div class="category-filters" role="group" aria-label="Filter stories by category">
+        <button type="button" class="filter-button is-active" data-filter="all" aria-pressed="true">All</button>
+        <button type="button" class="filter-button" data-filter="match-reports" aria-pressed="false">Match reports</button>
+        <button type="button" class="filter-button" data-filter="club-news" aria-pressed="false">Club news</button>
+        <button type="button" class="filter-button" data-filter="community" aria-pressed="false">Community</button>
+      </div>
+      <p class="filter-empty" hidden>No stories in this category yet.</p>
+      <div class="story-grid" id="story-list">
+        <article class="story-card featured" data-category="club-news">
           <a class="story-image image-red" href="/stories/season-2026-review/" aria-label="Read the 2026 season review"><span class="image-kicker">SEASON REVIEW</span><span class="image-title">A season of shared ambition</span><span class="image-ball" aria-hidden="true">●</span></a>
           <div class="story-body">
-            <p class="story-meta"><time datetime="2026-10-21">21 October 2026</time><span>·</span> Season review</p>
+            <p class="story-meta"><time datetime="2026-10-21">21 October 2026</time><span>·</span> Club news</p>
             <h3><a href="/stories/season-2026-review/">Timau Union reflects on a season of progress</a></h3>
             <p>Timau Union FC finished second in Zone A and qualified for the Meru County League playoffs for a second consecutive season.</p>
             <a class="read-link" href="/stories/season-2026-review/">Read story <span aria-hidden="true">→</span></a>
           </div>
         </article>
-        <article class="story-card">
+        <article class="story-card" data-category="match-reports">
           <a class="story-image image-dark" href="/stories/playoff-quarter-final/" aria-label="Read the playoff quarter-final report"><span class="image-kicker">MATCH REPORT</span><span class="image-title">The playoff journey</span><span class="image-ball" aria-hidden="true">●</span></a>
           <div class="story-body">
-            <p class="story-meta"><time datetime="2026-10-18">18 October 2026</time><span>·</span> Playoffs</p>
+            <p class="story-meta"><time datetime="2026-10-18">18 October 2026</time><span>·</span> Match report</p>
             <h3><a href="/stories/playoff-quarter-final/">A difficult end to the playoff campaign</a></h3>
             <p>Timau Union’s 2026 campaign came to a close after the quarter-final against Mwanga Millers.</p>
             <a class="read-link" href="/stories/playoff-quarter-final/">Read story <span aria-hidden="true">→</span></a>
           </div>
         </article>
       </div>
+      <button class="button button-red load-more" id="load-more" type="button" hidden>Load more stories</button>
       <div class="updates-strip">
-        <div><p class="eyebrow">STAY IN THE LOOP</p><h2>Club announcements and updates</h2><p>For the latest official notices, squad information and confirmed fixtures, use the club’s main website.</p></div>
-        <a class="button button-red" href="https://timauunionfc.co.ke/">Latest club updates ↗</a>
+        <div><p class="eyebrow">STAY IN THE LOOP</p><h2>Club announcements and updates</h2><p>For the latest official notices, squad information and confirmed fixtures, use the club’s main website.</p><div class="fixture-card" id="next-fixture" aria-live="polite"><strong>Next fixture: to be confirmed</strong><p>Check the main club website for the latest fixtures.</p></div></div>
+        <a class="button button-red" href="https://timauunionfc.co.ke/season.html">Latest fixtures ↗</a>
       </div>
     </section>
     <section class="club-banner">
       <div><p class="eyebrow">COMMUNITY FOOTBALL. SHARED AMBITION.</p><h2>One club, one community.</h2><p>Follow the journey and support football in Timau.</p></div>
       <div class="banner-links"><a href="https://www.facebook.com/timauunionfc" rel="noopener noreferrer" target="_blank">Facebook ↗</a><a href="https://www.instagram.com/timauunionfc/" rel="noopener noreferrer" target="_blank">Instagram ↗</a></div>
     </section>
+    <section class="support-section" id="support">
+      <div class="support-crest"><img src="https://timauunionfc.co.ke/assets/club-crest.svg" alt="" width="64" height="64" loading="lazy"></div>
+      <div><p class="eyebrow red">PARTNER WITH THE CLUB</p><h2>Support Timau Union FC</h2><p>We welcome local businesses and well-wishers as partners. Partners receive visibility through match-day posters, social mentions and club messages.</p></div>
+      <a class="button button-red" href="https://timauunionfc.co.ke/#sponsors">Become a partner ↗</a>
+    </section>
   </main>
-  <footer class="site-footer"><a class="footer-brand" href="https://timauunionfc.co.ke/">Timau Union FC</a><p>Our club. Our community. Our future.</p><small>© <span id="year">2026</span> Timau Union FC · <a href="https://timauunionfc.co.ke/">Main club website</a></small></footer>
+  <footer class="site-footer">
+    <img class="footer-crest" src="https://timauunionfc.co.ke/assets/club-crest.svg" alt="" width="44" height="44" loading="lazy">
+    <a class="footer-brand" href="https://timauunionfc.co.ke/">Timau Union FC</a>
+    <p>Our club. Our community. Our future.</p>
+    <a class="button button-whatsapp" href="https://whatsapp.com/channel/0029VbEVNYh2975I1olyh23K" target="_blank" rel="noopener noreferrer">Follow on WhatsApp ↗</a>
+    <small>© <span id="year">2026</span> Timau Union FC · <a href="https://timauunionfc.co.ke/">Main club website</a></small>
+  </footer>
   <script src="/assets/site.js" defer></script>
 </body>
 </html>
