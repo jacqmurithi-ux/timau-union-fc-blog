@@ -6,7 +6,8 @@ document.addEventListener("DOMContentLoaded",function(){
   var articleMessage=document.getElementById("article-message"),imageFile=document.getElementById("article-image-file");
   var imagePreview=document.getElementById("image-preview"),previewImage=document.getElementById("preview-image");
   var contentForm=document.getElementById("site-content-form"),contentList=document.getElementById("site-content-list");
-  var contentMessage=document.getElementById("content-message"),currentUser=null,articles=[],siteItems=[],uploadedPath=null;
+  var contentMessage=document.getElementById("content-message"),currentUser=null,articles=[],siteItems=[],uploadedPath=null,siteUploadedPath=null;
+  var siteImageFile=document.getElementById("site-content-image-file"),siteImagePreview=document.getElementById("site-image-preview"),sitePreviewImage=document.getElementById("site-preview-image");
   var categoryLabels={"match-reports":"Match reports","club-news":"Club news","community":"Community stories"};
   function el(tag,cls,txt){var n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n;}
   function message(node,txt,isError){node.textContent=txt||"";node.classList.toggle("is-error",!!isError);}
@@ -49,6 +50,7 @@ document.addEventListener("DOMContentLoaded",function(){
     if(!articles.length){articleList.append(el("p","muted","No articles yet. Create the first story."));return;}
     articles.forEach(function(a){
       var card=el("article","library-item"),info=el("div","library-info"),title=el("h3","",a.title);
+      if(a.image_url&&safeUrl(a.image_url)){var thumb=el("img","library-thumb");thumb.src=safeUrl(a.image_url);thumb.alt="";thumb.loading="lazy";card.append(thumb);}
       var meta=el("p","library-meta",(categoryLabels[a.category]||a.category)+" · "+(a.status==="published"?"Published":a.status==="unpublished"?"Unpublished":"Draft")+" · "+dateLabel(a.published_at));
       info.append(title,meta);var actions=el("div","library-actions");
       var edit=el("button","button button-outline","Edit");edit.type="button";edit.addEventListener("click",function(){fillArticle(a);});
@@ -130,6 +132,7 @@ document.addEventListener("DOMContentLoaded",function(){
     if(!siteItems.length){contentList.append(el("p","muted","No sponsor content or announcements yet."));return;}
     siteItems.forEach(function(item){
       var row=el("article","library-item"),info=el("div","library-info"),title=el("h3","",item.title);
+      if(item.image_url&&safeUrl(item.image_url)){var thumb=el("img","library-thumb");thumb.src=safeUrl(item.image_url);thumb.alt="";thumb.loading="lazy";row.append(thumb);}
       var meta=el("p","library-meta",(item.content_type==="sponsor"?"Sponsor content":"Announcement")+" · "+(item.active?"Visible":"Hidden"));
       info.append(title,meta);var actions=el("div","library-actions");
       var edit=el("button","button button-outline","Edit");edit.type="button";edit.addEventListener("click",function(){fillSiteItem(item);});
@@ -141,17 +144,27 @@ document.addEventListener("DOMContentLoaded",function(){
   }
   function fillSiteItem(item){
     contentForm.hidden=false;["id","content_type","title","body","link_url","image_url","sort_order"].forEach(function(k){contentForm.elements[k].value=item[k]===null||item[k]===undefined?"":item[k];});
+    siteUploadedPath=item.image_path||null;siteImageFile.value="";siteImagePreview.hidden=!item.image_url;if(item.image_url)sitePreviewImage.src=item.image_url;
     contentForm.elements.active.checked=!!item.active;message(contentMessage,"",false);contentForm.scrollIntoView({behavior:"smooth",block:"center"});
   }
-  document.getElementById("new-site-content").addEventListener("click",function(){contentForm.reset();contentForm.elements.id.value="";contentForm.elements.sort_order.value="0";contentForm.hidden=false;message(contentMessage,"",false);});
+  document.getElementById("new-site-content").addEventListener("click",function(){contentForm.reset();contentForm.elements.id.value="";contentForm.elements.sort_order.value="0";siteUploadedPath=null;siteImageFile.value="";siteImagePreview.hidden=true;sitePreviewImage.removeAttribute("src");contentForm.hidden=false;message(contentMessage,"",false);});
+  contentForm.elements.content_type.addEventListener("change",function(){if(["branding","hero"].includes(this.value)){contentForm.elements.active.checked=true;if(this.value==="branding"){contentForm.elements.title.value="Blog icon and logo";contentForm.elements.sort_order.value="-100";}else{contentForm.elements.title.value="Homepage hero photo";}}});
+  siteImageFile.addEventListener("change",function(){var file=siteImageFile.files&&siteImageFile.files[0];if(!file)return;if(!/^image\/(jpeg|png|webp|avif)$/.test(file.type)||file.size>10485760){siteImageFile.value="";message(contentMessage,"Choose a JPG, PNG, WebP or AVIF image under 10 MB.",true);return;}sitePreviewImage.src=URL.createObjectURL(file);siteImagePreview.hidden=false;message(contentMessage,"Image selected. It will upload when you save.",false);});
+  document.getElementById("remove-site-image").addEventListener("click",function(){contentForm.elements.image_url.value="";siteUploadedPath=null;siteImageFile.value="";siteImagePreview.hidden=true;sitePreviewImage.removeAttribute("src");});
   document.getElementById("cancel-content-edit").addEventListener("click",function(){contentForm.hidden=true;});
   contentForm.addEventListener("submit",async function(e){
     e.preventDefault();message(contentMessage,"Saving content…",false);
-    var existing=siteItems.find(function(x){return x.id===contentForm.elements.id.value;});
-    var payload={content_type:siteVal("content_type"),title:siteVal("title"),body:siteVal("body"),link_url:siteVal("link_url")||null,image_url:siteVal("image_url")||null,active:contentForm.elements.active.checked,sort_order:Number(siteVal("sort_order"))||0,updated_by:currentUser.id};
-    if(!existing)payload.created_by=currentUser.id;
-    var q=existing?client.from("blog_site_content").update(payload).eq("id",existing.id):client.from("blog_site_content").insert(payload);
-    var r=await q;if(r.error){message(contentMessage,r.error.message,true);return;}
-    contentForm.hidden=true;message(contentMessage,"Content saved.",false);await loadSiteItems();
+    try{
+      var existing=siteItems.find(function(x){return x.id===contentForm.elements.id.value;});
+      var imageUrl=siteVal("image_url")||null,imagePath=siteUploadedPath;
+      var file=siteImageFile.files&&siteImageFile.files[0];
+      if(file){var ext=file.name.split(".").pop().toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";var path="site-"+Date.now()+"-"+crypto.randomUUID()+"."+ext;var uploaded=await client.storage.from("blog-article-images").upload(path,file,{contentType:file.type,upsert:false});if(uploaded.error)throw uploaded.error;imageUrl=client.storage.from("blog-article-images").getPublicUrl(path).data.publicUrl;imagePath=path;}
+      var type=siteVal("content_type");
+      var payload={content_type:type,title:siteVal("title"),body:siteVal("body"),link_url:siteVal("link_url")||null,image_url:imageUrl,image_path:imagePath,active:["branding","hero"].includes(type)?true:contentForm.elements.active.checked,sort_order:type==="branding"?-100:(Number(siteVal("sort_order"))||0),updated_by:currentUser.id};
+      if(!existing)payload.created_by=currentUser.id;
+      var q=existing?client.from("blog_site_content").update(payload).eq("id",existing.id):client.from("blog_site_content").insert(payload);
+      var r=await q;if(r.error)throw r.error;
+      contentForm.hidden=true;message(contentMessage,"Content saved. Uploaded image is ready for the public blog.",false);await loadSiteItems();
+    }catch(err){message(contentMessage,err.message||"Could not save content.",true);}
   });
 });
