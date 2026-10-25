@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded",function(){
       contentForm.hidden=true;message(contentMessage,"Content saved. Uploaded image is ready for the public blog.",false);await loadSiteItems();
     }catch(err){message(contentMessage,err.message||"Could not save content.",true);}
   });
-  var defaultCrest="https://timauunionfc.co.ke/assets/club-crest.svg";
+  var defaultCrest="https://timauunionfc.co.ke/assets/club-crest.jpg";
   var appearanceRecords={};
   var logoFile=document.getElementById("appearance-logo-file"),partnerFile=document.getElementById("appearance-partner-file");
   function previewAppearanceFile(input,preview,previewImg,messageNode){
