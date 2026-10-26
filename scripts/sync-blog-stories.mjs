@@ -25,12 +25,12 @@ for (const story of stories) {
   const url = `${baseUrl}/stories/${encodeURIComponent(story.slug)}/`;
   const image = absolute(story.image_url) || "https://timauunionfc.co.ke/assets/club-crest.jpg";
   let html = template;
-  html = html.replace(/<title>[^<]*<\\/title>/i, `<title>${esc(title)} | Timau Union FC Blog</title>`);
+  html = html.replace(/<title>[^<]*<\/title>/i, `<title>${esc(title)} | Timau Union FC Blog</title>`);
   for (const [name, content] of [["description", description]]) html = replaceMeta(html, name, meta("name", name, content));
   for (const [name, content] of [["og:type","article"],["og:site_name","Timau Union FC Blog"],["og:title",title],["og:description",description],["og:url",url],["og:image",image],["og:image:secure_url",image],["og:image:type",image.toLowerCase().endsWith(".png")?"image/png":image.toLowerCase().endsWith(".webp")?"image/webp":"image/jpeg"],["og:image:alt",title]]) html = replaceMeta(html, name, meta("property", name, content));
   for (const [name, content] of [["twitter:card",story.image_url?"summary_large_image":"summary"],["twitter:title",title],["twitter:description",description],...(story.image_url?[["twitter:image",image]]:[])]) html = replaceMeta(html, name, meta("name", name, content));
   const canonical = `<link rel="canonical" href="${esc(url)}">`;
-  html = /<link\\s+rel=["']canonical["'][^>]*>/i.test(html) ? html.replace(/<link\\s+rel=["']canonical["'][^>]*>/i, canonical) : html.replace("</head>", `${canonical}</head>`);
+  html = /<link\s+rel=["']canonical["'][^>]*>/i.test(html) ? html.replace(/<link\s+rel=["']canonical["'][^>]*>/i, canonical) : html.replace("</head>", `${canonical}</head>`);
   const path = `stories/${story.slug}/index.html`;
   await fs.mkdir(`stories/${story.slug}`, { recursive: true });
   let old = "";
