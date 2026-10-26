@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded",async function(){
       grid.replaceChildren();
       result.data.forEach(function(a,index){
         var card=el("article","story-card"+(index===0?" featured":""));card.dataset.category=a.category;
-        var link=el("a","story-image "+(index%2?"image-dark":"image-red"));link.href="/story.html?slug="+encodeURIComponent(a.slug);link.setAttribute("aria-label","Read "+a.title);
+        var link=el("a","story-image "+(index%2?"image-dark":"image-red"));link.href="/stories/"+encodeURIComponent(a.slug)+"/";link.setAttribute("aria-label","Read "+a.title);
         if(a.image_url&&validUrl(a.image_url)){var image=el("img","story-card-photo");image.src=validUrl(a.image_url);image.alt=a.title+" — Timau Union FC";image.loading="lazy";link.append(image);}
         link.append(el("span","image-kicker",categoryLabel(a.category).toUpperCase()),el("span","image-title",a.title));
         var body=el("div","story-body"),meta=el("p","story-meta");meta.append(el("time","",dateLabel(a.published_at)),el("span","","·"),el("span","",categoryLabel(a.category)));
