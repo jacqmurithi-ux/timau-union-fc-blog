@@ -21,6 +21,36 @@ document.addEventListener("DOMContentLoaded",async function(){
     body.replaceChildren();
     (a.body||"").split(/\n\s*\n/).map(function(p){return p.trim();}).filter(Boolean).forEach(function(p){body.append(el("p","",p));});
     if(!body.children.length)body.append(el("p","","This story has no article text yet."));
+
+    /* Suggest related stories after the full article body. */
+    var relatedSection=el("section","related-stories");
+    relatedSection.setAttribute("aria-labelledby","related-stories-title");
+    relatedSection.append(el("h2","","More to explore"));
+    relatedSection.querySelector("h2").id="related-stories-title";
+    relatedSection.append(el("p","related-stories-intro","Keep reading the latest stories, updates and news from Timau Union FC."));
+    var relatedGrid=el("div","related-stories-grid");
+    relatedSection.append(relatedGrid);
+    body.insertAdjacentElement("afterend",relatedSection);
+    client.from("blog_articles").select("title,excerpt,category,image_url,published_at,slug").eq("status","published").neq("slug",a.slug).order("published_at",{ascending:false}).limit(12).then(function(result){
+      if(result.error||!result.data||!result.data.length){relatedSection.remove();return;}
+      var articles=result.data.slice().sort(function(left,right){
+        var leftMatch=a.category&&left.category===a.category?1:0;
+        var rightMatch=a.category&&right.category===a.category?1:0;
+        return rightMatch-leftMatch;
+      }).slice(0,3);
+      articles.forEach(function(item){
+        var card=el("article","related-story-card");
+        if(item.image_url){var imageLink=el("a","related-story-image-link");imageLink.href="/stories/"+encodeURIComponent(item.slug)+"/";var thumb=el("img","related-story-image");thumb.src=item.image_url;thumb.alt="";thumb.loading="lazy";imageLink.append(thumb);card.append(imageLink);}
+        if(item.category)card.append(el("p","related-story-category",item.category));
+        var heading=el("h3","");var link=el("a","",item.title);link.href="/stories/"+encodeURIComponent(item.slug)+"/";heading.append(link);card.append(heading);
+        if(item.excerpt)card.append(el("p","related-story-excerpt",item.excerpt));
+        var read=el("a","related-story-read","Read article →");read.href="/stories/"+encodeURIComponent(item.slug)+"/";card.append(read);
+        relatedGrid.append(card);
+      });
+      if(!articles.length)relatedSection.remove();
+      var more=el("a","related-stories-all","Explore all stories →");more.href="/";relatedSection.append(more);
+    }).catch(function(){relatedSection.remove();});
+
     var description=(a.excerpt||a.title).slice(0,155),canonicalUrl=location.origin+"/stories/"+encodeURIComponent(a.slug)+"/";
     setMeta("description",description,"name");
     var canonical=document.querySelector('link[rel="canonical"]');
