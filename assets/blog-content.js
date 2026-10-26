@@ -8,7 +8,11 @@ document.addEventListener("DOMContentLoaded",async function(){
   var grid=document.getElementById("story-list");
   try{
     var result=await client.from("blog_articles").select("slug,title,excerpt,category,image_url,published_at,author_name").eq("status","published").order("published_at",{ascending:false});
-    if(!result.error&&result.data&&result.data.length){
+    if(!result.error&&result.data){
+      var latestSlug="betika-meru-football-challenge-2026";
+      if(!result.data.some(function(a){return a.slug===latestSlug;})){
+        result.data.unshift({slug:latestSlug,title:"Timau Union Returns to Betika Meru Football Challenge: Can the Boys Go Further?",excerpt:"Timau Union returns to the Betika Meru Football Challenge after reaching the knockouts last time. Can the club build on its Zone A second-place finish and go further?",category:"club-news",image_url:"",published_at:"2026-10-26T07:00:00Z",author_name:"Timau Union FC"});
+      }
       grid.replaceChildren();
       result.data.forEach(function(a,index){
         var card=el("article","story-card"+(index===0?" featured":""));card.dataset.category=a.category;
