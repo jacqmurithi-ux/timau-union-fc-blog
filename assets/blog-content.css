@@ -48,3 +48,21 @@
 .story-page .related-story-read:hover,.story-page .related-stories-all:hover{text-decoration:underline;}
 .story-page .related-stories-all{display:inline-block;margin-top:22px;color:var(--red);font-size:13px;font-weight:800;text-decoration:none;}
 @media(max-width:700px){.story-page .related-stories-grid{grid-template-columns:1fr;gap:14px}.story-page .related-story-card{display:grid;grid-template-columns:112px minmax(0,1fr);grid-template-rows:auto auto 1fr;column-gap:12px;padding:0 12px 12px}.story-page .related-story-image-link{grid-column:1;grid-row:1/4;width:112px;aspect-ratio:4/5;margin-top:12px}.story-page .related-story-category{grid-column:2;margin:14px 0 0}.story-page .related-story-card h3{grid-column:2;margin:5px 0;font-size:15px}.story-page .related-story-excerpt{grid-column:2;margin:0 0 8px;font-size:12px}.story-page .related-story-read{grid-column:2;margin:0;font-size:12px}.story-page .related-story-card:not(:has(.related-story-image-link)){display:flex;padding:14px}.story-page .related-story-card:not(:has(.related-story-image-link)) .related-story-category{margin:0}.story-page .related-story-card:not(:has(.related-story-image-link)) h3{margin:5px 0}.story-page .related-story-card:not(:has(.related-story-image-link)) .related-story-excerpt{margin:0 0 8px}.story-page .related-story-card:not(:has(.related-story-image-link)) .related-story-read{margin-top:auto}}
+
+/* Compact, branded reading list below the story-sharing controls. */
+.story-page .related-stories{width:100%;margin:30px 0 26px;padding:24px 0;border-top:3px solid var(--red);border-bottom:1px solid var(--line);}
+.story-page .related-stories h2{margin:0 0 5px;font-size:23px;line-height:1.25;color:var(--ink);}
+.story-page .related-stories-intro{margin:0 0 16px;color:var(--muted);font-size:13px;line-height:1.6;}
+.story-page .related-stories-grid{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line);}
+.story-page .related-story-card{display:block;min-width:0;padding:15px 14px;border:0;border-bottom:1px solid var(--line);border-left:3px solid transparent;background:#fff;transition:background .15s ease,border-color .15s ease;}
+.story-page .related-story-card:hover{background:#fff8f8;border-left-color:var(--red);}
+.story-page .related-story-meta{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:0 0 6px;}
+.story-page .related-story-category{margin:0;color:var(--red);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;}
+.story-page .related-story-date{color:var(--muted);font-size:11px;}
+.story-page .related-story-title{display:inline-block;color:var(--ink);font-size:16px;font-weight:800;line-height:1.4;text-decoration:none;}
+.story-page .related-story-title:hover{color:var(--red);text-decoration:underline;}
+.story-page .related-story-excerpt{margin:5px 0 7px;color:var(--muted);font-size:13px;line-height:1.55;}
+.story-page .related-story-read{display:inline-block;margin:0;color:var(--red);font-size:12px;font-weight:800;text-decoration:none;}
+.story-page .related-story-read:hover,.story-page .related-stories-all:hover{text-decoration:underline;}
+.story-page .related-stories-all{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:10px 14px;background:var(--red);color:#fff;font-size:12px;font-weight:800;text-decoration:none;}
+.story-page .related-stories-all:hover{background:#9f1023;text-decoration:none;}
