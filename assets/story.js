@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded",async function(){
     relatedSection.setAttribute("aria-labelledby","related-stories-title");
     relatedSection.append(el("h2","","More stories"));
     relatedSection.querySelector("h2").id="related-stories-title";
-    relatedSection.append(el("p","related-stories-intro","More from the club, in date order."));
+    relatedSection.append(el("p","related-stories-intro","More from the club."));
     var relatedGrid=el("div","related-stories-grid");
     relatedSection.append(relatedGrid);
     var shareSection=document.querySelector(".story-share");
