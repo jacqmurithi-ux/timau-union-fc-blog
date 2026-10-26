@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded",async function(){
   var client=window.supabase.createClient(window.BLOG_SUPABASE_URL,window.BLOG_SUPABASE_KEY);
   function el(tag,cls,txt){var n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n;}
   function dateLabel(value){var d=value?new Date(value):null;return d&&!isNaN(d)?d.toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"}):"";}
-  function categoryLabel(value){return {"match-reports":"Match report","club-news":"Club news","community":"Community"}[value]||"Club news";}
+  function categoryLabel(value){return {"match-reports":"Match report","club-news":"Club news","the-journey":"The journey","community":"Our people","partners-community":"Partners & community"}[value]||"Club news";}
   function validUrl(value){try{var u=new URL(value,location.origin);return ["https:","http:"].includes(u.protocol)?u.href:"";}catch(_){return "";}}
   var grid=document.getElementById("story-list");
   try{
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded",async function(){
       result.data.forEach(function(a,index){
         var card=el("article","story-card"+(index===0?" featured":""));card.dataset.category=a.category;
         var link=el("a","story-image "+(index%2?"image-dark":"image-red"));link.href="/story.html?slug="+encodeURIComponent(a.slug);link.setAttribute("aria-label","Read "+a.title);
-        if(a.image_url&&validUrl(a.image_url)){var image=el("img","story-card-photo");image.src=validUrl(a.image_url);image.alt="";image.loading="lazy";link.append(image);}
+        if(a.image_url&&validUrl(a.image_url)){var image=el("img","story-card-photo");image.src=validUrl(a.image_url);image.alt=a.title+" — Timau Union FC";image.loading="lazy";link.append(image);}
         link.append(el("span","image-kicker",categoryLabel(a.category).toUpperCase()),el("span","image-title",a.title));
         var body=el("div","story-body"),meta=el("p","story-meta");meta.append(el("time","",dateLabel(a.published_at)),el("span","","·"),el("span","",categoryLabel(a.category)));
         var heading=el("h3",""),headingLink=el("a","",a.title);headingLink.href=link.href;heading.append(headingLink);
