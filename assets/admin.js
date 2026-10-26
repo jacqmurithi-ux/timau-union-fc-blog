@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded",function(){
   var contentForm=document.getElementById("site-content-form"),contentList=document.getElementById("site-content-list");
   var contentMessage=document.getElementById("content-message"),currentUser=null,articles=[],siteItems=[],uploadedPath=null,siteUploadedPath=null;
   var siteImageFile=document.getElementById("site-content-image-file"),siteImagePreview=document.getElementById("site-image-preview"),sitePreviewImage=document.getElementById("site-preview-image");
-  var categoryLabels={"match-reports":"Match reports","club-news":"Club news","community":"Community stories"};
+  var categoryLabels={"match-reports":"Match reports","club-news":"Club news","the-journey":"The journey","community":"Our people","partners-community":"Partners & community"};
   function el(tag,cls,txt){var n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n;}
   function message(node,txt,isError){node.textContent=txt||"";node.classList.toggle("is-error",!!isError);}
   function val(name){return articleForm.elements[name].value.trim();}
