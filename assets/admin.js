@@ -56,12 +56,12 @@ document.addEventListener("DOMContentLoaded",function(){
       var edit=el("button","button button-outline","Edit");edit.type="button";edit.addEventListener("click",function(){fillArticle(a);});
       var state=el("button",a.status==="published"?"button button-outline":"button button-red",a.status==="published"?"Unpublish":"Publish");state.type="button";
       state.addEventListener("click",function(){changeStatus(a,a.status==="published"?"unpublished":"published");});
-      var preview=el("a","text-link","Preview ↗");preview.href="/story.html?slug="+encodeURIComponent(a.slug);preview.target="_blank";preview.rel="noopener noreferrer";
+      var preview=el("a","text-link","Preview ↗");preview.href="/stories/"+encodeURIComponent(a.slug)+"/";preview.target="_blank";preview.rel="noopener noreferrer";
       actions.append(edit,state);if(a.status==="published")actions.append(preview);card.append(info,actions);articleList.append(card);
     });
   }
   function resetArticle(){
-    articleForm.reset();articleForm.elements.id.value="";articleForm.elements.author_name.value="Timau Union FC";
+    articleForm.reset();articleForm.elements.id.value="";articleForm.elements.author_name.value="Timau Union FC";imageFile.value="";
     document.getElementById("editor-heading").textContent="Create an article";uploadedPath=null;
     imagePreview.hidden=true;previewImage.removeAttribute("src");message(articleMessage,"",false);
   }
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded",function(){
   document.querySelectorAll("#article-form [name=title]").forEach(function(input){input.addEventListener("input",function(){if(!articleForm.elements.id.value)articleForm.elements.slug.value=slugify(input.value);});});
   function fillArticle(a){
     ["id","title","slug","category","excerpt","body","image_url","author_name"].forEach(function(k){articleForm.elements[k].value=a[k]||"";});
-    uploadedPath=a.image_path||null;document.getElementById("editor-heading").textContent="Edit article";
+    uploadedPath=a.image_path||null;imageFile.value="";document.getElementById("editor-heading").textContent="Edit article";
     imagePreview.hidden=!a.image_url;if(a.image_url)previewImage.src=a.image_url;message(articleMessage,"",false);
     document.querySelector(".editor-panel").scrollIntoView({behavior:"smooth",block:"start"});
   }
