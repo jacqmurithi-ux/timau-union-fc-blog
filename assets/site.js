@@ -64,11 +64,15 @@ document.addEventListener("DOMContentLoaded",function(){
   }
 
   document.querySelectorAll("[data-share-page]").forEach(function(el){
-    var url=encodeURIComponent(window.location.href);
+    var canonical=document.querySelector('link[rel="canonical"]');
+    var pageUrl=canonical&&canonical.href?canonical.href:window.location.href;
+    var url=encodeURIComponent(pageUrl);
     var title=encodeURIComponent(document.title);
-    if(el.matches("[data-share='facebook']"))el.href="https://www.facebook.com/sharer/sharer.php?u="+url;
+    if(el.matches("[data-share='facebook']"))el.href="https://www.facebook.com/sharer.php?u="+url;
     if(el.matches("[data-share='whatsapp']"))el.href="https://wa.me/?text="+title+"%20"+url;
     if(el.matches("[data-share='x']"))el.href="https://twitter.com/intent/tweet?text="+title+"&url="+url;
+    el.target="_blank";
+    el.rel="noopener noreferrer";
   });
   document.querySelectorAll("[data-share-copy]").forEach(function(button){
     button.addEventListener("click",async function(){
