@@ -1,0 +1,61 @@
+/* Editorial desktop layout polish: centered canvas, generous whitespace, clear story hierarchy. */
+:root { --max: 1240px; --desktop-gutter: 32px; }
+body { background: #f6f6f4; }
+.site-header { position: relative; z-index: 20; }
+.header-inner { max-width: 1304px; padding: 14px 32px; min-height: 82px; }
+.brand img { width: 54px; height: 54px; }
+.brand strong { font-size: 14px; letter-spacing: .08em; }
+.site-header nav { gap: 10px; }
+.site-header nav a { padding: 10px 12px; border-radius: 5px; white-space: nowrap; }
+.site-header nav a:hover, .site-header nav a.active { background: #f7eeee; }
+.hero { min-height: 440px; }
+.hero-content { padding: 80px 32px; }
+.hero h1 { max-width: 780px; font-size: clamp(46px, 5vw, 72px); }
+.hero-copy { font-size: 18px; line-height: 1.65; }
+.hero-photo-slot { flex: 0 0 310px; margin-right: max(32px, calc((100vw - 1240px) / 2)); }
+.content-section { max-width: 1304px; padding: 76px 32px 88px; }
+.section-heading { margin-bottom: 30px; }
+.section-heading h2 { font-size: clamp(30px, 3vw, 42px); }
+.story-search { max-width: 620px; }
+.story-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
+.story-card { border-radius: 10px; overflow: hidden; box-shadow: 0 10px 32px rgba(17,19,23,.055); transition: transform .18s ease, box-shadow .18s ease; }
+.story-card:hover { transform: translateY(-3px); box-shadow: 0 16px 38px rgba(17,19,23,.1); }
+.story-image { min-height: 290px; }
+.story-body { padding: 28px 30px 30px; }
+.story-body h3 { font-size: 24px; }
+.story-body > p:not(.story-meta) { font-size: 15px; line-height: 1.7; }
+.updates-strip { padding: 34px 38px; border-radius: 10px; }
+.club-banner { padding-top: 54px; padding-bottom: 54px; }
+.support-section { max-width: 1304px; margin: 0 auto; padding: 58px 32px; }
+.site-footer { padding: 42px 24px 48px; }
+.article-hero { padding: 72px 32px 78px; }
+.article-hero-inner { max-width: 900px; }
+.article-layout { max-width: 900px; padding: 48px 32px 80px; margin: 0 auto; }
+.article-content { font-size: 18px; line-height: 1.85; }
+@media (min-width: 1500px) { .hero-content { padding-left: 0; } }
+@media (max-width: 900px) {
+  .header-inner { padding: 12px 20px; }
+  .hero { min-height: 0; flex-direction: column; align-items: stretch; }
+  .hero-content { padding: 54px 24px 28px; }
+  .hero-photo-slot, .hero-photo-slot.has-photo { width: auto; flex: initial; margin: 0 24px 28px; }
+  .content-section { padding: 56px 24px 64px; }
+  .site-header nav { gap: 2px; }
+}
+@media (max-width: 600px) {
+  .header-inner { padding: 10px 16px; gap: 12px; }
+  .brand img { width: 44px; height: 44px; }
+  .brand strong { font-size: 12px; }
+  .brand small { font-size: 9px; }
+  .hero h1 { font-size: clamp(36px, 10vw, 50px); }
+  .hero-content { padding: 42px 20px 24px; }
+  .content-section { padding: 44px 16px 52px; }
+  .story-grid { grid-template-columns: 1fr; gap: 18px; }
+  .story-image { min-height: 220px; }
+  .story-body { padding: 20px; }
+  .updates-strip { align-items: flex-start; flex-direction: column; padding: 22px; }
+  .club-banner { align-items: flex-start; flex-direction: column; padding: 34px 20px; }
+  .support-section { padding: 38px 20px; }
+  .article-hero { padding: 42px 20px 48px; }
+  .article-layout { padding: 32px 20px 56px; }
+}
+@media (prefers-reduced-motion: reduce) { .story-card { transition: none; } .story-card:hover { transform: none; } }
