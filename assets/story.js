@@ -25,13 +25,13 @@ document.addEventListener("DOMContentLoaded",async function(){
     /* Suggest related stories after the full article body. */
     var relatedSection=el("section","related-stories");
     relatedSection.setAttribute("aria-labelledby","related-stories-title");
-    relatedSection.append(el("h2","","More to explore"));
+    relatedSection.append(el("h2","","More stories"));
     relatedSection.querySelector("h2").id="related-stories-title";
-    relatedSection.append(el("p","related-stories-intro","Keep reading the latest stories, updates and news from Timau Union FC."));
+    relatedSection.append(el("p","related-stories-intro","More from the club, in date order."));
     var relatedGrid=el("div","related-stories-grid");
     relatedSection.append(relatedGrid);
-    body.insertAdjacentElement("afterend",relatedSection);
-    client.from("blog_articles").select("title,excerpt,category,image_url,published_at,slug").eq("status","published").neq("slug",a.slug).order("published_at",{ascending:false}).limit(12).then(function(result){
+    var shareSection=document.querySelector(".story-share");\n    if(shareSection)shareSection.insertAdjacentElement("afterend",relatedSection);else body.insertAdjacentElement("afterend",relatedSection);
+    client.from("blog_articles").select("title,excerpt,category,image_url,published_at,slug").eq("status","published").neq("slug",a.slug).order("published_at",{ascending:false}).limit(3).then(function(result){
       if(result.error||!result.data||!result.data.length){relatedSection.remove();return;}
       var articles=result.data.slice().sort(function(left,right){
         var leftMatch=a.category&&left.category===a.category?1:0;
@@ -40,11 +40,13 @@ document.addEventListener("DOMContentLoaded",async function(){
       }).slice(0,3);
       articles.forEach(function(item){
         var card=el("article","related-story-card");
-        if(item.image_url){var imageLink=el("a","related-story-image-link");imageLink.href="/stories/"+encodeURIComponent(item.slug)+"/";var thumb=el("img","related-story-image");thumb.src=item.image_url;thumb.alt="";thumb.loading="lazy";imageLink.append(thumb);card.append(imageLink);}
-        if(item.category)card.append(el("p","related-story-category",item.category));
-        var heading=el("h3","");var link=el("a","",item.title);link.href="/stories/"+encodeURIComponent(item.slug)+"/";heading.append(link);card.append(heading);
+        var link=el("a","related-story-title",item.title);link.href="/stories/"+encodeURIComponent(item.slug)+"/";
+        var meta=el("div","related-story-meta");
+        if(item.category)meta.append(el("span","related-story-category",item.category));
+        if(item.published_at){var published=new Date(item.published_at);if(!isNaN(published))meta.append(el("time","related-story-date",published.toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})));}
+        card.append(meta,link);
         if(item.excerpt)card.append(el("p","related-story-excerpt",item.excerpt));
-        var read=el("a","related-story-read","Read article →");read.href="/stories/"+encodeURIComponent(item.slug)+"/";card.append(read);
+        var read=el("a","related-story-read","Read story →");read.href=link.href;card.append(read);
         relatedGrid.append(card);
       });
       if(!articles.length)relatedSection.remove();
