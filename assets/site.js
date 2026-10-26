@@ -55,11 +55,11 @@ document.addEventListener("DOMContentLoaded",function(){
       return response.json();
     }).then(function(data){
       var title=typeof data.title==="string"&&data.title.trim()?data.title:"Next fixture: to be confirmed";
-      var note=typeof data.note==="string"&&data.note.trim()?data.note:"Check the main club website for the latest fixtures.";
+      var note=typeof data.note==="string"?data.note.trim():"";
       fixtureBox.replaceChildren();
       var heading=document.createElement("strong");heading.textContent=title;
-      var paragraph=document.createElement("p");paragraph.textContent=note;
-      fixtureBox.append(heading,paragraph);
+      fixtureBox.append(heading);
+      if(note){var paragraph=document.createElement("p");paragraph.textContent=note;fixtureBox.append(paragraph);}
     }).catch(function(){/* Keep the safe HTML placeholder when data cannot be loaded. */});
   }
 
