@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded",function(){
     }).catch(function(){/* Keep the safe HTML placeholder when data cannot be loaded. */});
   }
 
-  document.querySelectorAll("[data-share-page]").forEach(function(el){
+  function updateShareLink(el){
     var canonical=document.querySelector('link[rel="canonical"]');
     var pageUrl=canonical&&canonical.href?canonical.href:window.location.href;
     var url=encodeURIComponent(pageUrl);
@@ -73,6 +73,11 @@ document.addEventListener("DOMContentLoaded",function(){
     if(el.matches("[data-share='x']"))el.href="https://twitter.com/intent/tweet?text="+title+"&url="+url;
     el.target="_blank";
     el.rel="noopener noreferrer";
+  }
+  document.querySelectorAll("[data-share-page]").forEach(function(el){
+    updateShareLink(el);
+    /* Story metadata loads asynchronously; refresh the destination at click time. */
+    el.addEventListener("click",function(){updateShareLink(el);});
   });
   document.querySelectorAll("[data-share-copy]").forEach(function(button){
     button.addEventListener("click",async function(){
