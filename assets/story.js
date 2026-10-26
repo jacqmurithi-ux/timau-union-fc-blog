@@ -30,14 +30,11 @@ document.addEventListener("DOMContentLoaded",async function(){
     relatedSection.append(el("p","related-stories-intro","More from the club, in date order."));
     var relatedGrid=el("div","related-stories-grid");
     relatedSection.append(relatedGrid);
-    var shareSection=document.querySelector(".story-share");\n    if(shareSection)shareSection.insertAdjacentElement("afterend",relatedSection);else body.insertAdjacentElement("afterend",relatedSection);
+    var shareSection=document.querySelector(".story-share");
+    if(shareSection)shareSection.insertAdjacentElement("afterend",relatedSection);else body.insertAdjacentElement("afterend",relatedSection);
     client.from("blog_articles").select("title,excerpt,category,image_url,published_at,slug").eq("status","published").neq("slug",a.slug).order("published_at",{ascending:false}).limit(3).then(function(result){
       if(result.error||!result.data||!result.data.length){relatedSection.remove();return;}
-      var articles=result.data.slice().sort(function(left,right){
-        var leftMatch=a.category&&left.category===a.category?1:0;
-        var rightMatch=a.category&&right.category===a.category?1:0;
-        return rightMatch-leftMatch;
-      }).slice(0,3);
+      var articles=result.data.slice(0,3);
       articles.forEach(function(item){
         var card=el("article","related-story-card");
         var link=el("a","related-story-title",item.title);link.href="/stories/"+encodeURIComponent(item.slug)+"/";
